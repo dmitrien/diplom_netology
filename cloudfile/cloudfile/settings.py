@@ -37,7 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'adminpanel.apps.AdminpanelConfig',
+    'rest_framework',
+    'knox',
+    'accounts.apps.AccountsConfig',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -75,8 +83,12 @@ WSGI_APPLICATION = 'cloudfile.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'netology_db',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': '1507',
     }
 }
 
