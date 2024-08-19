@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('adminpanel', '0002_alter_files_size_alter_fileversion_version'),
+        ('storage', '0002_alter_files_size_alter_fileversion_version'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

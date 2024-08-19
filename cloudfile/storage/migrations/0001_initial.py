@@ -39,21 +39,21 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('version', models.IntegerField(max_length=10)),
-                ('file_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='adminpanel.files')),
+                ('file_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='storage.files')),
             ],
         ),
         migrations.AddField(
             model_name='files',
             name='user_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='adminpanel.users'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='storage.users'),
         ),
         migrations.CreateModel(
             name='AccessControl',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('access_level', models.BooleanField(default=True)),
-                ('file_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='adminpanel.files')),
-                ('user_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='adminpanel.users')),
+                ('file_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='storage.files')),
+                ('user_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='storage.users')),
             ],
         ),
     ]

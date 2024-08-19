@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'adminpanel.apps.AdminpanelConfig',
+    'storage.apps.AdminpanelConfig',
     'rest_framework',
     'knox',
     'accounts.apps.AccountsConfig',
