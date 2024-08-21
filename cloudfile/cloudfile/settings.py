@@ -111,6 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DJANGO_SETTINGS_MODULE = 'cloudfile.settings'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

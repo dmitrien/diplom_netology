@@ -1,29 +1,32 @@
-from rest_framework import generics, permissions, status
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
 from .serializers import FilesSerializer
+from .models import Files
 
 
-class GetFilesAPI(generics.GenericAPIView):
+class FileListAPI(generics.ListAPIView):
+    queryset = Files.objects.all()
+    serializer_class = FilesSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Files.objects.all()
+        else:
+            return Files.objects.filter(owner_id=user)
+
+
+class FileUploadAPI(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
     serializer_class = FilesSerializer
 
     def get_queryset(self):
-        return self.request.user.files.all()
+        user = self.request.user
+        return Files.objects.filter(owner_id=user)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-
-class FileUploadAPI(generics.GenericAPIView):
-    parser_classes = [MultiPartParser, FormParser]
-
-    def post(self, request, *args, **kwargs):
-        file_serializer = FilesSerializer(data=request.data)
-        if file_serializer.is_valid():
-            file_serializer.save()
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-        raise Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save(owner_id=self.request.user)
 

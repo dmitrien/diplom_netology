@@ -1,8 +1,7 @@
-from django.urls import path
-from .api import GetFilesAPI, FileUploadAPI
+from rest_framework import routers
+from .api import FileListAPI, FileUploadAPI
 
-urlpatterns = [
-    path('api/files', GetFilesAPI.as_view()),
-    path('api/files/upload', FileUploadAPI.as_view()),
-]
-
+router = routers.DefaultRouter()
+# router.register('api/files', FileListAPI, 'files')
+router.register('api/file', FileUploadAPI, 'file')
+urlpatterns = router.urls
