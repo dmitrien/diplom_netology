@@ -28,5 +28,9 @@ class FileUploadAPI(viewsets.ModelViewSet):
         return Files.objects.filter(owner_id=user)
 
     def perform_create(self, serializer):
+        files = self.request.FILES['file']
+        with open(f'files/{files.name}', 'wb+') as destination:
+            for chunk in files.chunks():
+                destination.write(chunk)
         serializer.save(owner_id=self.request.user)
 

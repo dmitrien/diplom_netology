@@ -6,12 +6,17 @@ import os
 # Create your models here.
 
 
-def upload_to(instance, filename):
-    # Генерация уникального пути для каждого файла
-    _, extension = os.path.splitext(filename)
-    random_name = get_random_string(length=32)
-    return f'{instance.owner_id.username}/{random_name}{extension}'
-
+def upload_to(filename):
+    all_files_and_dirs = os.listdir('files/')
+    if filename in all_files_and_dirs:
+        name, extension = os.path.splitext(filename)
+        index = 1
+        while True:
+            filename = f'{name}{index}{extension}'
+            if filename not in all_files_and_dirs:
+                break
+            index += 1
+    return f'files/{filename}'
 
 class Files(models.Model):
     filename = models.CharField(max_length=255)
@@ -25,7 +30,7 @@ class Files(models.Model):
 
     def save(self, *args, **kwargs):
         self.download_link = get_random_string(length=32)
-        self.size = self.file.path
+        self.size = self.file.size
         super(Files, self).save(*args, **kwargs)
 
     def __str__(self):
