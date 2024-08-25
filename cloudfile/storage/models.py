@@ -6,17 +6,19 @@ import os
 # Create your models here.
 
 
-def upload_to(filename):
+def upload_to(instance, filename):
+    file_name, extension = os.path.splitext(filename)
+    new_file_name = instance.filename + extension
     all_files_and_dirs = os.listdir('files/')
-    if filename in all_files_and_dirs:
-        name, extension = os.path.splitext(filename)
+    if new_file_name in all_files_and_dirs:
+        name, extension = os.path.splitext(new_file_name)
         index = 1
         while True:
-            filename = f'{name}{index}{extension}'
-            if filename not in all_files_and_dirs:
+            new_file_name = f'{name}{index}{extension}'
+            if new_file_name not in all_files_and_dirs:
                 break
             index += 1
-    return f'files/{filename}'
+    return f'files/{new_file_name}'
 
 
 class Files(models.Model):

@@ -4,9 +4,10 @@ from .serializers import FilesSerializer
 from .models import Files
 from django.http import FileResponse
 from .decoder import decoded_file_path
+import os.path
 
 
-class FileListAPI(generics.ListAPIView):
+class FileListAPI(viewsets.ModelViewSet):
     queryset = Files.objects.all()
     serializer_class = FilesSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -23,6 +24,7 @@ class FileUploadAPI(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+    queryset = Files.objects.all()
     serializer_class = FilesSerializer
 
     def get_queryset(self):
@@ -31,9 +33,12 @@ class FileUploadAPI(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         files = self.request.FILES['file']
-        with open(f'files/{files.name}', 'wb+') as destination:
+        name, extension = os.path.splitext(files.name)
+        new_file_name = self.request.POST['filename'] + extension
+        with open(f'files/{new_file_name}', 'wb+') as destination:
             for chunk in files.chunks():
                 destination.write(chunk)
+        serializer.is_valid()
         serializer.save(owner_id=self.request.user)
 
 
