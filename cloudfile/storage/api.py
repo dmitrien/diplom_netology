@@ -2,6 +2,8 @@ from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
 from .serializers import FilesSerializer
 from .models import Files
+from django.http import FileResponse
+from .decoder import decoded_file_path
 
 
 class FileListAPI(generics.ListAPIView):
@@ -33,4 +35,32 @@ class FileUploadAPI(viewsets.ModelViewSet):
             for chunk in files.chunks():
                 destination.write(chunk)
         serializer.save(owner_id=self.request.user)
+
+
+class FileSharedLinkAPI(viewsets.ModelViewSet):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    queryset = Files.objects.all()
+    serializer_class = FilesSerializer
+
+    def retrieve(self, request, pk=None):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response({'link': f'api/file/download/{serializer.data["download_link"]}'})
+
+
+class FileDownloadAPI(viewsets.ModelViewSet):
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    allowed_methods = ['GET']
+    queryset = Files.objects.all()
+    serializer_class = FilesSerializer
+
+    def retrieve(self, request, pk=None):
+        filtered_queryset = self.get_queryset().filter(download_link=pk)
+        serializer = self.get_serializer(filtered_queryset, many=True)
+        return FileResponse(open(decoded_file_path(serializer), 'rb'))
+
 

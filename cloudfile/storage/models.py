@@ -18,6 +18,7 @@ def upload_to(filename):
             index += 1
     return f'files/{filename}'
 
+
 class Files(models.Model):
     filename = models.CharField(max_length=255)
     file = models.FileField(upload_to=upload_to)
