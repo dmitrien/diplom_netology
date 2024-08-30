@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-yii6fp_rz=0i(xsqu)wpm72ld@uoe04yyp#=fm&m&oqa!wzka9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+CORS_ALLOW_ALL_ORIGINS = True  # Для разработки, в продакшене лучше указать конкретные домены
+CORS_ALLOW_CREDENTIALS = True
+ALLOWED_HOSTS = [
+]
 
 
 # Application definition
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     'storage.apps.AdminpanelConfig',
     'rest_framework',
     'knox',
+    'corsheaders',
     'accounts.apps.AccountsConfig',
     'frontend.apps.FrontendConfig'
 ]
@@ -50,6 +54,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
