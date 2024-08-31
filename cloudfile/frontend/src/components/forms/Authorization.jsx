@@ -5,7 +5,10 @@ import axios from 'axios'
 const Authorization = () => {
   const [username,setUsername] = useState('');
   const [password,setPassword] = useState('');
-  const submit = async e =>{
+  const openRegister = () =>{
+    window.location.href = '/register'
+  };
+  const submit = async e => {
     e.preventDefault()
 
     const user = {
@@ -28,7 +31,8 @@ const { data } = await axios.post('http://localhost:8000/api/auth/login', user, 
   localStorage.setItem('refresh_token',data.refresh);
   axios.defaults.headers.common['Authorization'] = `Bearer ${data['access']}`;
   window.location.href = '/files'
-  }
+  };
+  
     return (
       <div className="Auth-form-container">
       <form className="Auth-form" onSubmit={submit}>
@@ -48,13 +52,13 @@ const { data } = await axios.post('http://localhost:8000/api/auth/login', user, 
           <div className="col-sm-10">
             <button type="submit" className="btn btn-primary">Sign in</button>
           </div>
-          <div className="col-sm-10">
-            <button className="btn btn-primary">Sign up</button>
-          </div>
         </div>
       </form>
+      <div className="col-sm-10" onClick={openRegister}>
+        <button className="btn btn-primary">Sign up</button>
+      </div>
       </div>
     )
-  }
+  };
 
 export default Authorization
