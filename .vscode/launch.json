@@ -17,11 +17,11 @@
             "program": "${workspaceFolder}\\cloudfile\\manage.py",
         },
         {
-            "type": "msedge",
+            "type": "chrome",
             "request": "launch",
-            "name": "Launch Edge against localhost",
+            "name": "Chrome",
             "url": "http://localhost:8000",
-            "webRoot": "${workspaceFolder}\\cloudfile\\frontend"
+            "webRoot": "${workspaceFolder}\\cloudfile\\"
           }
     ]
 

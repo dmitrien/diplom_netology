@@ -40,7 +40,7 @@ try{
   console.error('Authorization failed:', error.message);
   toast.error('Ошибка авторизации: "Введен неверный логин или пароль"');
 }
-  };
+};
   
     return (
       <div className="Auth-form-container">

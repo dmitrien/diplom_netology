@@ -63,7 +63,7 @@ function Listfiles({ onDownload, onDelete }) {
             <th onClick={() => handleSort('filename')}>Filename</th>
             <th onClick={() => handleSort('size')}>Size</th>
             <th onClick={() => handleSort('uploaded_at')}>Uploaded</th>
-            <th onClick={() => handleSort('downloaded_at')}>Uploaded</th>
+            <th onClick={() => handleSort('downloaded_at')}>Downloaded</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -75,11 +75,12 @@ function Listfiles({ onDownload, onDelete }) {
               <td>{new Date(file.uploaded_at).toLocaleDateString()}</td>
               <td>{new Date(file.downloaded_at).toLocaleDateString()}</td>
               <td>
-                <button className="delete-button" onClick={() => onDelete(file.id)}>
+                <button className="delete-button" onClick={() => {onDelete(file.id) 
+                  fetchFiles()}}>
                   Delete
                 </button>
-                <button className="download-button" onClick={() => onDownload(file.id)}>
-                  Download
+                <button className="Shared-button" onClick={() => onDownload(file.id)}>
+                  Shared
                 </button>
               </td>
             </tr>
