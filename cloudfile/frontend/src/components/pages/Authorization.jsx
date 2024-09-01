@@ -1,12 +1,17 @@
 import React, {useState} from 'react'
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios'
+
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Authorization = () => {
   const [username,setUsername] = useState('');
   const [password,setPassword] = useState('');
+  const navigate = useNavigate();
   const openRegister = () =>{
-    window.location.href = '/register'
+    navigate('/register')
   };
   const submit = async e => {
     e.preventDefault()
@@ -23,14 +28,18 @@ const config = {
   withCredentials: true,
 
 };
-
-const { data } = await axios.post('http://localhost:8000/api/auth/login', user, config);
+try{
+  const { data } = await axios.post('http://localhost:8000/api/auth/login', user, config);
   localStorage.clear();
-  console.log(data.access)
-  localStorage.setItem('access_token',data.access);
-  localStorage.setItem('refresh_token',data.refresh);
-  axios.defaults.headers.common['Authorization'] = `Bearer ${data['access']}`;
-  window.location.href = '/files'
+  console.log(data)
+  localStorage.setItem('access_token',data.token);
+  localStorage.setItem('refresh_token',data.token);
+  axios.defaults.headers.common['Authorization'] = `Token ${data['token']}`;
+  navigate('/files')
+} catch (error) {
+  console.error('Authorization failed:', error.message);
+  toast.error('Ошибка авторизации: "Введен неверный логин или пароль"');
+}
   };
   
     return (
@@ -57,6 +66,7 @@ const { data } = await axios.post('http://localhost:8000/api/auth/login', user, 
       <div className="col-sm-10" onClick={openRegister}>
         <button className="btn btn-primary">Sign up</button>
       </div>
+      <ToastContainer />
       </div>
     )
   };
