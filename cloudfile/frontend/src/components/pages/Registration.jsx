@@ -1,21 +1,33 @@
-import React, { Component, useState } from 'react'
+import React from 'react'
+import { useForm } from 'react-hook-form';
 import axios from 'axios'
 
 const Registration = () => {
-  const [username,setUsername] = useState('');
-  const [email,setEmail] = useState('');
-  const [firstname,setFirstname] = useState('');
-  const [lastname,setLastname] = useState('');
-  const [password,setPassword] = useState('');
-  const submit = async e => {
-    e.preventDefault()
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
+  const validateUsername = (value) => {
+    const regex = /^[a-zA-Z][a-zA-Z0-9]{3,19}$/;
+    return regex.test(value) || "Только латинские буквы и цифры, первый символ — буква, длина от 4 до 20 символов.";
+  };
+
+  const validatePassword = (value) => {
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    return regex.test(value) || "Не менее 6 символов: как минимум одна заглавная буква, одна цифра и один специальный символ.";
+  };
+
+  const validateEmail = (value) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(value) || "Проверьте коректность email!";
+  };
+
+  const submit = async (register_data) => {
+    console.log(register_data)
     const user = {
-      username: username,
-      email: email,
-      firstname: firstname,
-      lastname: lastname,
-      password: password
+      username: register_data.username,
+      email: register_data.email,
+      firstname: register_data.firstname,
+      lastname: register_data.lastname,
+      password: register_data.password
     };
 
     const config = {
@@ -34,33 +46,31 @@ const { data } = await axios.post('http://localhost:8000/api/auth/register', use
 };
     return (
       <div className="Register-form-container">
-        <form className="Register-form" onSubmit={submit}>
+        <form className="Register-form" onSubmit={handleSubmit(submit)}>
         <div className="form-row">
             <div class="form-group col-md-6">
-                <label for="inputEmail4">Email</label>
-                <input type="email" value={email} className="form-control" id="inputEmail4"  placeholder="test@test.ru" onChange={e => setEmail(e.target.value)}></input>
+                <label for="inputUsername4">Username</label>
+                <input type="text" className="form-control" id="inputUsername4" {...register("username", { required: "Поле обязательно для заполнения!", validate: validateUsername })}></input>{errors.username && <span className="error-validate-form">{errors.username.message}</span>}
             </div>
-            <div className="col-sm-10">
+            <div className="form-group col-md-6">
                 <label for="inputPassword4">Password</label>
-                <input type="password" value={password} className="form-control" id="inputPassword4" onChange={e => setPassword(e.target.value)}></input>
+                <input type="password" className="form-control" id="inputPassword4" {...register("password", { required: "Поле обязательно для заполнения!", validate: validatePassword })}></input>{errors.password && <span className="error-validate-form">{errors.password.message}</span>}
             </div>
-        </div>
-        <div className="form-group">
-          <label for="inputUsername" className="col-sm-2 col-form-label">Username</label>
-          <div className="col-sm-10">
-            <input type="text" value={username} className="form-control" id="inputUsername" onChange={e => setUsername(e.target.value)}></input>
-          </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Email</label>
+                <input type="email" className="form-control" id="inputEmail4" {...register("email", { required: "Поле обязательно для заполнения!", validate: validateEmail })}></input>{errors.email && <span className="error-validate-form">{errors.password.email}</span>}
+            </div>
         </div>
         <div className="form-group">
           <label for="inputFirstName" className="col-sm-2 col-form-label">First name</label>
           <div className="col-sm-10">
-            <input type="text" value={firstname} className="form-control" id="inputFirstName" onChange={e => setFirstname(e.target.value)}></input>
+            <input type="text" className="form-control" id="inputFirstName" {...register("firstname", { required: false })}></input>
           </div>
         </div>
         <div className="form-group">
           <label for="inputLastName" className="col-sm-2 col-form-label">Last name</label>
           <div className="col-sm-10">
-            <input type="text" value={lastname} className="form-control" id="inputLastName" onChange={e => setLastname(e.target.value)}></input>
+            <input type="text" className="form-control" id="inputLastName" {...register("lastname", { required: false })}></input>
           </div>
         </div>
         <div className="form-group row">

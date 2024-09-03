@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Listfiles({ onDownload, onDelete }) {
+function Listfiles({ onDownload, onDelete, onRename }) {
   const [files, setFiles] = useState([]);
   const [sortColumn, setSortColumn] = useState(null);
   const [isSortedDesc, setIsSortedDesc] = useState(false);
@@ -76,11 +76,17 @@ function Listfiles({ onDownload, onDelete }) {
               <td>{new Date(file.downloaded_at).toLocaleDateString()}</td>
               <td>
                 <button className="delete-button" onClick={() => {onDelete(file.id) 
-                  fetchFiles()}}>
-                  Delete
+                  fetchFiles()
+                  }}>
+                  Удалить
                 </button>
                 <button className="Shared-button" onClick={() => onDownload(file.id)}>
-                  Shared
+                  Поделиться
+                </button>
+                <button className="Rename-button" onClick={() => {onRename(file.id)
+                  fetchFiles()
+                }}>
+                  Переименовать
                 </button>
               </td>
             </tr>
