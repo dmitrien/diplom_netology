@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios'
 
 import 'react-toastify/dist/ReactToastify.css';
+import '../style/Authorization.css'
 
 
 const Authorization = () => {
@@ -42,31 +43,23 @@ const submit = async (data) => {
 };
   
     return (
-      <div className="Auth-form-container">
-      <form className="Auth-form" onSubmit={handleSubmit(submit)}>
-        <div className="form-group row">
-          <label for="inputUserName" className="col-sm-2 col-form-label">User Name</label>
-          <div className="col-sm-10">
-            <input type="text" className="form-control" id="inputUserName" {...register("username", { required: true })}></input>{errors.username?.type === "required" && "Поле обязательно для заполнения!"}
+
+      <main className="form-signin">
+        <h1 class="h3">Авторизация</h1>
+      <form action="" onSubmit={handleSubmit(submit)}>
+          <div className="form-floating">
+            <input type="text" className="form-control" id="floatingInput" {...register("username", { required: true })}></input>{errors.username?.type === "required" && "Поле обязательно для заполнения!"}
+            <label for="floatingInput">User Name</label>
           </div>
-        </div>
-        <div className="form-group row">
-          <label for="inputPassword3" className="col-sm-2 col-form-label">Password</label>
-          <div className="col-sm-10">
-            <input type="password" className="form-control" id="inputPassword3" {...register("password", { required: true })}></input>{errors.password?.type === "required" && "Поле обязательно для заполнения!"}
+          <div className="form-floating">
+            <input type="password" className="form-control" id="floatingPassword" {...register("password", { required: true })}></input>{errors.password?.type === "required" && "Поле обязательно для заполнения!"}
+            <label for="floatingPassword">Password</label>
           </div>
-        </div>
-        <div className="form-group row">
-          <div className="col-sm-10">
-            <button type="submit" className="btn btn-primary">Sign in</button>
-          </div>
-        </div>
-      </form>
-      <div className="col-sm-10" onClick={openRegister}>
-        <button className="btn btn-primary">Sign up</button>
-      </div>
+        <button type="submit" className="w-100 btn btn-lg">Вход</button>
+        <button className="w-100 btn btn-lg" onClick={openRegister}>Регистрация</button>
       <ToastContainer />
-      </div>
+      </form>
+      </main>
     )
   };
 
