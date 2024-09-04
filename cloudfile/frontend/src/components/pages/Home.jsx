@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Header from '../layout/Header.jsx';
 import Listfiles from '../forms/Listfiles.jsx';
 import Addfile from '../forms/Addfile.jsx';
@@ -13,8 +13,10 @@ function Home() {
   const [files, setFiles] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showModalRename, setShowModalRename] = useState(false);
+  const [showModalFile, setShowModalFile] = useState(false);
   const [sharedLink, setSharedLink] = useState('');
   const [newFileName, setNewFileName] = useState('');
+  const fileIdToRename = useRef(null)
   const navigate = useNavigate();
 
   const deleteFile = async (id) => {
@@ -41,9 +43,10 @@ function Home() {
       console.log(response)
   };
 
-  const renameFile = async(id) => {
+  const renameFile = async () => {
+    const id_file = fileIdToRename.current
     const newName = {filename: newFileName}
-    const response = await axios.patch(`http://127.0.0.1:8000/api/file/shared/${id}/`, newName, {
+    const response = await axios.patch(`http://127.0.0.1:8000/api/files/${id_file}/`, newName, {
       headers: {
           'Authorization': `Token ${localStorage.getItem('access_token')}`
         },
@@ -62,11 +65,25 @@ function Home() {
       responseType: 'json'
     });
     setNewFileName(response.data.filename)
+    fileIdToRename.current = id;
+  };
+
+  const openModalFile = async(id) => {
+    const response = await axios.get(`http://127.0.0.1:8000/api/file/shared/${id}/`, {
+      headers: {
+          'Authorization': `Token ${localStorage.getItem('access_token')}`
+        },
+      withCredentials: true,
+      responseType: 'json'
+    });
+    setSharedLink(`${origin}/${response.data.link}/`);
+    setShowModalFile(true)
   };
 
   const closeModal = () => {
     setShowModal(false);
     setShowModalRename(false)
+    setShowModalFile(false);
     setSharedLink('');
   };
 
@@ -95,12 +112,12 @@ function Home() {
   return (
         <>
         <Header logOut={logOut}/>
-        <Listfiles files={files} setFiles={setFiles} onDelete={deleteFile} onDownload={sharedFile} onRename={openModalRename}/>
+        <Listfiles files={files} setFiles={setFiles} onDelete={deleteFile} onDownload={sharedFile} onRename={openModalRename} onOpen={openModalFile}/>
         <Addfile />
         {showModal && (
         <div className="modal shared-link">
           <h2>Ссылка для скачивания</h2>
-          <p>{sharedLink}</p>
+          <input type="url" value={sharedLink}></input>
           <button onClick={copyLink}>Copy Link</button>
           <button onClick={closeModal}>OK</button>
         </div>
@@ -108,11 +125,21 @@ function Home() {
         {showModalRename && (
         <div className="modal rename-file">
           <h2>Введите новое название!</h2>
-          <form className="rename-file-form" onSubmit={renameFile}>
+          <form className="rename-file-form" onSubmit={(e) => {
+            renameFile();
+            closeModal();
+            }}>
             <input type="text" className="new-name-file" value={newFileName} onChange={(e) => setNewFileName(e.target.value)}></input>
             <button type='submit'>Переименовать</button>
           </form>
           <button onClick={closeModal}>Отмена</button>
+        </div>
+        )}
+        {showModalFile && (
+        <div className="modal show-file">
+          <h2>Просмотр файла!</h2>
+          <iframe src={sharedLink}></iframe >
+          <button onClick={closeModal}>Закрыть</button>
         </div>
         )}
         <ToastContainer />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Listfiles({ onDownload, onDelete, onRename }) {
+function Listfiles({ onDownload, onDelete, onRename, onOpen }) {
   const [files, setFiles] = useState([]);
   const [sortColumn, setSortColumn] = useState(null);
   const [isSortedDesc, setIsSortedDesc] = useState(false);
@@ -80,13 +80,14 @@ function Listfiles({ onDownload, onDelete, onRename }) {
                   }}>
                   Удалить
                 </button>
-                <button className="Shared-button" onClick={() => onDownload(file.id)}>
+                <button className="shared-button" onClick={() => onDownload(file.id)}>
                   Поделиться
                 </button>
-                <button className="Rename-button" onClick={() => {onRename(file.id)
-                  fetchFiles()
-                }}>
+                <button className="rename-button" onClick={() => onRename(file.id)}>
                   Переименовать
+                </button>
+                <button className="show-file-button" onClick={() => onOpen(file.id)}>
+                  Просмотр
                 </button>
               </td>
             </tr>

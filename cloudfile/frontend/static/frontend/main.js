@@ -338,7 +338,8 @@ function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 function Listfiles(_ref) {
   var onDownload = _ref.onDownload,
     onDelete = _ref.onDelete,
-    onRename = _ref.onRename;
+    onRename = _ref.onRename,
+    onOpen = _ref.onOpen;
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
     _useState2 = _slicedToArray(_useState, 2),
     files = _useState2[0],
@@ -439,17 +440,21 @@ function Listfiles(_ref) {
         fetchFiles();
       }
     }, "\u0423\u0434\u0430\u043B\u0438\u0442\u044C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      className: "Shared-button",
+      className: "shared-button",
       onClick: function onClick() {
         return onDownload(file.id);
       }
     }, "\u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      className: "Rename-button",
+      className: "rename-button",
       onClick: function onClick() {
-        onRename(file.id);
-        fetchFiles();
+        return onRename(file.id);
       }
-    }, "\u041F\u0435\u0440\u0435\u0438\u043C\u0435\u043D\u043E\u0432\u0430\u0442\u044C")));
+    }, "\u041F\u0435\u0440\u0435\u0438\u043C\u0435\u043D\u043E\u0432\u0430\u0442\u044C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      className: "show-file-button",
+      onClick: function onClick() {
+        return onOpen(file.id);
+      }
+    }, "\u041F\u0440\u043E\u0441\u043C\u043E\u0442\u0440")));
   }))));
 }
 /* harmony default export */ __webpack_exports__["default"] = (Listfiles);
@@ -705,14 +710,19 @@ function Home() {
     _useState6 = _slicedToArray(_useState5, 2),
     showModalRename = _useState6[0],
     setShowModalRename = _useState6[1];
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
     _useState8 = _slicedToArray(_useState7, 2),
-    sharedLink = _useState8[0],
-    setSharedLink = _useState8[1];
+    showModalFile = _useState8[0],
+    setShowModalFile = _useState8[1];
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
     _useState10 = _slicedToArray(_useState9, 2),
-    newFileName = _useState10[0],
-    setNewFileName = _useState10[1];
+    sharedLink = _useState10[0],
+    setSharedLink = _useState10[1];
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+    _useState12 = _slicedToArray(_useState11, 2),
+    newFileName = _useState12[0],
+    setNewFileName = _useState12[1];
+  var fileIdToRename = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
   var navigate = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["useNavigate"])();
   var deleteFile = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
@@ -771,31 +781,32 @@ function Home() {
     };
   }();
   var renameFile = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(id) {
-      var newName, response;
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var id_file, newName, response;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
+            id_file = fileIdToRename.current;
             newName = {
               filename: newFileName
             };
-            _context3.next = 3;
-            return axios__WEBPACK_IMPORTED_MODULE_4___default.a.patch("http://127.0.0.1:8000/api/file/shared/".concat(id, "/"), newName, {
+            _context3.next = 4;
+            return axios__WEBPACK_IMPORTED_MODULE_4___default.a.patch("http://127.0.0.1:8000/api/files/".concat(id_file, "/"), newName, {
               headers: {
                 'Authorization': "Token ".concat(localStorage.getItem('access_token'))
               },
               withCredentials: true,
               responseType: 'json'
             });
-          case 3:
-            response = _context3.sent;
           case 4:
+            response = _context3.sent;
+          case 5:
           case "end":
             return _context3.stop();
         }
       }, _callee3);
     }));
-    return function renameFile(_x3) {
+    return function renameFile() {
       return _ref3.apply(this, arguments);
     };
   }();
@@ -817,19 +828,49 @@ function Home() {
           case 3:
             response = _context4.sent;
             setNewFileName(response.data.filename);
-          case 5:
+            fileIdToRename.current = id;
+          case 6:
           case "end":
             return _context4.stop();
         }
       }, _callee4);
     }));
-    return function openModalRename(_x4) {
+    return function openModalRename(_x3) {
       return _ref4.apply(this, arguments);
+    };
+  }();
+  var openModalFile = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(id) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.next = 2;
+            return axios__WEBPACK_IMPORTED_MODULE_4___default.a.get("http://127.0.0.1:8000/api/file/shared/".concat(id, "/"), {
+              headers: {
+                'Authorization': "Token ".concat(localStorage.getItem('access_token'))
+              },
+              withCredentials: true,
+              responseType: 'json'
+            });
+          case 2:
+            response = _context5.sent;
+            setSharedLink("".concat(origin, "/").concat(response.data.link, "/"));
+            setShowModalFile(true);
+          case 5:
+          case "end":
+            return _context5.stop();
+        }
+      }, _callee5);
+    }));
+    return function openModalFile(_x4) {
+      return _ref5.apply(this, arguments);
     };
   }();
   var closeModal = function closeModal() {
     setShowModal(false);
     setShowModalRename(false);
+    setShowModalFile(false);
     setSharedLink('');
   };
   var copyLink = function copyLink() {
@@ -838,13 +879,13 @@ function Home() {
     react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success('Ссылка успешно скопирована в буфер обмена!');
   };
   var logOut = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(e) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(e) {
       var response;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
           case 0:
-            _context5.prev = 0;
-            _context5.next = 3;
+            _context6.prev = 0;
+            _context6.next = 3;
             return axios__WEBPACK_IMPORTED_MODULE_4___default.a.post("http://127.0.0.1:8000/api/auth/logout", {
               headers: {
                 'Authorization': "Token ".concat(localStorage.getItem('access_token'))
@@ -853,23 +894,23 @@ function Home() {
               responseType: 'json'
             });
           case 3:
-            response = _context5.sent;
+            response = _context6.sent;
             navigate('/');
-            _context5.next = 11;
+            _context6.next = 11;
             break;
           case 7:
-            _context5.prev = 7;
-            _context5.t0 = _context5["catch"](0);
-            console.error('Log out failed:', _context5.t0.message);
+            _context6.prev = 7;
+            _context6.t0 = _context6["catch"](0);
+            console.error('Log out failed:', _context6.t0.message);
             react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].error('Ошибка разлогина: "Попробуйте позже"');
           case 11:
           case "end":
-            return _context5.stop();
+            return _context6.stop();
         }
-      }, _callee5, null, [[0, 7]]);
+      }, _callee6, null, [[0, 7]]);
     }));
     return function logOut(_x5) {
-      return _ref5.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_layout_Header_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -879,10 +920,14 @@ function Home() {
     setFiles: setFiles,
     onDelete: deleteFile,
     onDownload: sharedFile,
-    onRename: openModalRename
+    onRename: openModalRename,
+    onOpen: openModalFile
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_forms_Addfile_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null), showModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "modal shared-link"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "\u0421\u0441\u044B\u043B\u043A\u0430 \u0434\u043B\u044F \u0441\u043A\u0430\u0447\u0438\u0432\u0430\u043D\u0438\u044F"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, sharedLink), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "\u0421\u0441\u044B\u043B\u043A\u0430 \u0434\u043B\u044F \u0441\u043A\u0430\u0447\u0438\u0432\u0430\u043D\u0438\u044F"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "url",
+    value: sharedLink
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     onClick: copyLink
   }, "Copy Link"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     onClick: closeModal
@@ -890,7 +935,10 @@ function Home() {
     className: "modal rename-file"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u043E\u0432\u043E\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     className: "rename-file-form",
-    onSubmit: renameFile
+    onSubmit: function onSubmit(e) {
+      renameFile();
+      closeModal();
+    }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
     className: "new-name-file",
@@ -902,7 +950,13 @@ function Home() {
     type: "submit"
   }, "\u041F\u0435\u0440\u0435\u0438\u043C\u0435\u043D\u043E\u0432\u0430\u0442\u044C")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     onClick: closeModal
-  }, "\u041E\u0442\u043C\u0435\u043D\u0430")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_toastify__WEBPACK_IMPORTED_MODULE_6__["ToastContainer"], null));
+  }, "\u041E\u0442\u043C\u0435\u043D\u0430")), showModalFile && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "modal show-file"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "\u041F\u0440\u043E\u0441\u043C\u043E\u0442\u0440 \u0444\u0430\u0439\u043B\u0430!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("iframe", {
+    src: sharedLink
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    onClick: closeModal
+  }, "\u0417\u0430\u043A\u0440\u044B\u0442\u044C")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_toastify__WEBPACK_IMPORTED_MODULE_6__["ToastContainer"], null));
 }
 /* harmony default export */ __webpack_exports__["default"] = (Home);
 
