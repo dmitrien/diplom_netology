@@ -43,23 +43,24 @@ const submit = async (data) => {
 };
   
     return (
-
+    <div className="auth-form">
       <main className="form-signin">
         <h1 class="h3">Авторизация</h1>
       <form action="" onSubmit={handleSubmit(submit)}>
           <div className="form-floating">
             <input type="text" className="form-control" id="floatingInput" {...register("username", { required: true })}></input>{errors.username?.type === "required" && "Поле обязательно для заполнения!"}
-            <label for="floatingInput">User Name</label>
+            <label for="floatingInput">Логин</label>
           </div>
           <div className="form-floating">
             <input type="password" className="form-control" id="floatingPassword" {...register("password", { required: true })}></input>{errors.password?.type === "required" && "Поле обязательно для заполнения!"}
-            <label for="floatingPassword">Password</label>
+            <label for="floatingPassword">Пароль</label>
           </div>
         <button type="submit" className="w-100 btn btn-lg">Вход</button>
         <button className="w-100 btn btn-lg" onClick={openRegister}>Регистрация</button>
       <ToastContainer />
       </form>
       </main>
+    </div>
     )
   };
 

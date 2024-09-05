@@ -45,30 +45,14 @@ const Addfile = () => {
   
 
     return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="file"
-        onChange={handleFileInput}
-      />
-      <br />
-      <label>
-        Название файла:
-        <input
-          type="text"
-          value={fileName}
-          readOnly
-        />
-      </label>
-      <br />
-      <label>
-        Комментарий к файлу:
-        <textarea
-          value={fileComment}
-          onChange={(e) => setFileComment(e.target.value)}
-        />
-      </label>
-      <br />
-      <button type="submit">Отправить файл</button>
+    <form className="w-50 order-last" onSubmit={handleSubmit}>
+      <div className="mb-3">
+        <input className="form-control" type="file" id="formFile" onChange={handleFileInput}></input>
+        <label for="formFile" class="form-label">Введите название файла</label>
+        <input className="form-control" type="text" placeholder="Введите название файла" readOnly value={fileName} aria-label="default input example"></input>
+        <input className="form-control mt-2" type="text" placeholder="Введите Комментарий к файлу" onChange={(e) => setFileComment(e.target.value)} value={fileComment}></input>
+        <button className="btn btn-primary mt-3" type="submit">Отправить файл</button>
+      </div>
     <ToastContainer />
     </form>
     

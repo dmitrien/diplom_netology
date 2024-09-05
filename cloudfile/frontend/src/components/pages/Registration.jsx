@@ -1,11 +1,13 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 
 import '../style/Registration.css'
 
 const Registration = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const navigate = useNavigate();
 
   const validateUsername = (value) => {
     const regex = /^[a-zA-Z][a-zA-Z0-9]{3,19}$/;
@@ -44,44 +46,36 @@ const { data } = await axios.post('http://localhost:8000/api/auth/register', use
   localStorage.setItem('access_token',data.access);
   localStorage.setItem('refresh_token',data.refresh);
   axios.defaults.headers.common['Authorization'] = `Bearer ${data['access']}`;
-  window.location.href = '/'
+  navigate('/')
 };
     return (
-      <div className="Register-form-container">
-        <form className="Register-form" onSubmit={handleSubmit(submit)}>
-        <div className="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputUsername4">Username</label>
-                <input type="text" className="form-control" id="inputUsername4" {...register("username", { required: "Поле обязательно для заполнения!", validate: validateUsername })}></input>{errors.username && <span className="error-validate-form">{errors.username.message}</span>}
+      <main className="register-form-container">
+        <h1 class="h3">Регистрация</h1>
+        <form className="register-form" onSubmit={handleSubmit(submit)}>
+            <div className="form-floating">
+                <input type="text" className="form-control" id="floatingInput" {...register("username", { required: "Поле обязательно для заполнения!", validate: validateUsername })}></input>{errors.username && <span className="error-validate-form">{errors.username.message}</span>}
+                <label for="floatingInput">Логин</label>
             </div>
-            <div className="form-group col-md-6">
-                <label for="inputPassword4">Password</label>
-                <input type="password" className="form-control" id="inputPassword4" {...register("password", { required: "Поле обязательно для заполнения!", validate: validatePassword })}></input>{errors.password && <span className="error-validate-form">{errors.password.message}</span>}
+            <div className="form-floating">   
+                <input type="password" className="form-control" id="floatingPassword" {...register("password", { required: "Поле обязательно для заполнения!", validate: validatePassword })}></input>{errors.password && <span className="error-validate-form">{errors.password.message}</span>}
+                <label for="floatingPassword">Пароль</label>
             </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">Email</label>
-                <input type="email" className="form-control" id="inputEmail4" {...register("email", { required: "Поле обязательно для заполнения!", validate: validateEmail })}></input>{errors.email && <span className="error-validate-form">{errors.password.email}</span>}
+            <div className="form-floating">
+                <input type="email" className="form-control" id="floatingInput" {...register("email", { required: "Поле обязательно для заполнения!", validate: validateEmail })}></input>{errors.email && <span className="error-validate-form">{errors.password.email}</span>}
+                <label for="floatingInput">Email</label>
             </div>
-        </div>
-        <div className="form-group">
-          <label for="inputFirstName" className="col-sm-2 col-form-label">First name</label>
-          <div className="col-sm-10">
-            <input type="text" className="form-control" id="inputFirstName" {...register("firstname", { required: false })}></input>
-          </div>
-        </div>
-        <div className="form-group">
-          <label for="inputLastName" className="col-sm-2 col-form-label">Last name</label>
-          <div className="col-sm-10">
-            <input type="text" className="form-control" id="inputLastName" {...register("lastname", { required: false })}></input>
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="col-sm-10">
-            <button type="submit" className="btn btn-primary">Sign up</button>
-          </div>
-        </div>
+            <div className="form-floating">        
+                <input type="text" className="form-control" id="floatingInput" {...register("firstname", { required: false })}></input>
+                <label for="floatingInput">Имя</label>
+            </div>
+            <div className="form-floating">
+                <input type="text" className="form-control" id="floatingInput" {...register("lastname", { required: false })}></input>
+                <label for="floatingInput">Фамилия</label>
+            </div>
+            <button type="submit" className="w-100 btn btn-lg">Зарегестрироваться</button>
+            <button className="w-100 btn btn-lg" onClick={() => navigate('/')}>Отмена</button>
       </form>
-      </div>
+      </main>
     )
   };
 

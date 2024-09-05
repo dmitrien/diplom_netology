@@ -56,15 +56,14 @@ function Listfiles({ onDownload, onDelete, onRename, onOpen }) {
 
 
     return (
-      <div className="file-container">
-      <table>
+      <table className="table table-info table-striped">
         <thead>
           <tr>
-            <th onClick={() => handleSort('filename')}>Filename</th>
-            <th onClick={() => handleSort('size')}>Size</th>
-            <th onClick={() => handleSort('uploaded_at')}>Uploaded</th>
-            <th onClick={() => handleSort('downloaded_at')}>Downloaded</th>
-            <th>Actions</th>
+            <th onClick={() => handleSort('filename')}>Имя файла</th>
+            <th onClick={() => handleSort('size')}>Размер</th>
+            <th onClick={() => handleSort('uploaded_at')}>Дата загрузки</th>
+            <th onClick={() => handleSort('downloaded_at')}>Дата скачивания</th>
+            <th>Действия с файлом</th>
           </tr>
         </thead>
         <tbody>
@@ -75,26 +74,27 @@ function Listfiles({ onDownload, onDelete, onRename, onOpen }) {
               <td>{new Date(file.uploaded_at).toLocaleDateString()}</td>
               <td>{new Date(file.downloaded_at).toLocaleDateString()}</td>
               <td>
-                <button className="delete-button" onClick={() => {onDelete(file.id) 
-                  fetchFiles()
-                  }}>
-                  Удалить
-                </button>
-                <button className="shared-button" onClick={() => onDownload(file.id)}>
-                  Поделиться
-                </button>
-                <button className="rename-button" onClick={() => onRename(file.id)}>
-                  Переименовать
-                </button>
-                <button className="show-file-button" onClick={() => onOpen(file.id)}>
-                  Просмотр
-                </button>
+                <div className="btn-group" role="group">
+                  <button type="submit" className="btn btn-primary" onClick={() => {onDelete(file.id) 
+                    fetchFiles()
+                    }}>
+                    Удалить
+                  </button>
+                  <button type="submit" className="btn btn-primary" onClick={() => onDownload(file.id)}>
+                    Поделиться
+                  </button>
+                  <button type="submit" className="btn btn-primary" onClick={() => onRename(file.id)}>
+                    Переименовать
+                  </button>
+                  <button type="submit" className="btn btn-primary" onClick={() => onOpen(file.id)}>
+                    Просмотр
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
     )
 
 }

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 
-import '../style/Home.css'
+import '../style/Home.css';
 
 
 function Home() {
@@ -110,40 +110,70 @@ function Home() {
   }
 
   return (
-        <>
-        <Header logOut={logOut}/>
-        <Listfiles files={files} setFiles={setFiles} onDelete={deleteFile} onDownload={sharedFile} onRename={openModalRename} onOpen={openModalFile}/>
-        <Addfile />
+      <div className="d-flex flex-column min-vh-100">
+        <Header className="mb-3" logOut={logOut}/>
+        <div className="flex-grow-1 d-flex flex-column gap-3 mt-3">
+          <Addfile className="col-md-4"/>
+          <Listfiles className="flex-grow-1" files={files} setFiles={setFiles} onDelete={deleteFile} onDownload={sharedFile} onRename={openModalRename} onOpen={openModalFile}/>
+        </div>
         {showModal && (
-        <div className="modal shared-link">
-          <h2>Ссылка для скачивания</h2>
-          <input type="url" value={sharedLink}></input>
-          <button onClick={copyLink}>Copy Link</button>
-          <button onClick={closeModal}>OK</button>
+        <div className="modal" tabindex="-1">
+          <div className="modal-dialog">
+            <div clclassNameass="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-body">Ссылка для скачивания</h5>
+              </div>
+              <div className="modal-body">
+                <p>{sharedLink}</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-primary" onClick={copyLink}>Копировать ссылку</button>
+                <button type="button" className="btn btn-secondary" onClick={closeModal}>Отмена</button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
         {showModalRename && (
-        <div className="modal rename-file">
-          <h2>Введите новое название!</h2>
-          <form className="rename-file-form" onSubmit={(e) => {
-            renameFile();
-            closeModal();
-            }}>
-            <input type="text" className="new-name-file" value={newFileName} onChange={(e) => setNewFileName(e.target.value)}></input>
-            <button type='submit'>Переименовать</button>
-          </form>
-          <button onClick={closeModal}>Отмена</button>
+        <div className="modal" tabindex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-body">Введите новое название!</h5>
+              </div>
+              <div className="modal-body">
+                <input type="text" className="new-name-file" value={newFileName} onChange={(e) => setNewFileName(e.target.value)}></input>
+              </div>
+              <div className="modal-footer">
+                    <button className="btn btn-primary" type='submit' onClick={(e) => {
+                  renameFile();
+                  closeModal();
+                  }}>Переименовать</button>
+                    <button type="button" className="btn btn-secondary" onClick={closeModal}>Отмена</button>
+                  </div>
+            </div>
+          </div>
         </div>
-        )}
+      )}
         {showModalFile && (
-        <div className="modal show-file">
-          <h2>Просмотр файла!</h2>
-          <iframe src={sharedLink}></iframe >
-          <button onClick={closeModal}>Закрыть</button>
+        <div className="modal" tabindex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5>Просмотр файла!</h5>
+              </div>
+              <div className="modal-body">
+                <iframe src={sharedLink}></iframe >
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-secondary" onClick={closeModal}>Закрыть</button>
+              </div>
+            </div>
+          </div>
         </div>
         )}
         <ToastContainer />
-        </>
+    </div>
   );
 }
 
