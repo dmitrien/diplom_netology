@@ -461,18 +461,24 @@ function Listfiles(_ref) {
     }, "\u0423\u0434\u0430\u043B\u0438\u0442\u044C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       type: "submit",
       className: "btn btn-primary",
+      "data-bs-toggle": "modal",
+      "data-bs-target": "#staticBackdropShared",
       onClick: function onClick() {
         return onDownload(file.id);
       }
     }, "\u041F\u043E\u0434\u0435\u043B\u0438\u0442\u044C\u0441\u044F"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       type: "submit",
       className: "btn btn-primary",
+      "data-bs-toggle": "modal",
+      "data-bs-target": "#staticBackdropRename",
       onClick: function onClick() {
         return onRename(file.id);
       }
     }, "\u041F\u0435\u0440\u0435\u0438\u043C\u0435\u043D\u043E\u0432\u0430\u0442\u044C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       type: "submit",
       className: "btn btn-primary",
+      "data-bs-toggle": "modal",
+      "data-bs-target": "#staticBackdropShow",
       onClick: function onClick() {
         return onOpen(file.id);
       }
@@ -681,26 +687,14 @@ function Home() {
     _useState2 = _slicedToArray(_useState, 2),
     files = _useState2[0],
     setFiles = _useState2[1];
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
     _useState4 = _slicedToArray(_useState3, 2),
-    showModal = _useState4[0],
-    setShowModal = _useState4[1];
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+    sharedLink = _useState4[0],
+    setSharedLink = _useState4[1];
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
     _useState6 = _slicedToArray(_useState5, 2),
-    showModalRename = _useState6[0],
-    setShowModalRename = _useState6[1];
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
-    _useState8 = _slicedToArray(_useState7, 2),
-    showModalFile = _useState8[0],
-    setShowModalFile = _useState8[1];
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
-    _useState10 = _slicedToArray(_useState9, 2),
-    sharedLink = _useState10[0],
-    setSharedLink = _useState10[1];
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
-    _useState12 = _slicedToArray(_useState11, 2),
-    newFileName = _useState12[0],
-    setNewFileName = _useState12[1];
+    newFileName = _useState6[0],
+    setNewFileName = _useState6[1];
   var fileIdToRename = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(null);
   var navigate = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["useNavigate"])();
   var deleteFile = /*#__PURE__*/function () {
@@ -746,10 +740,9 @@ function Home() {
             });
           case 2:
             response = _context2.sent;
-            setShowModal(true);
             setSharedLink("".concat(origin, "/").concat(response.data.link));
             console.log(response);
-          case 6:
+          case 5:
           case "end":
             return _context2.stop();
         }
@@ -795,8 +788,7 @@ function Home() {
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
-            setShowModalRename(true);
-            _context4.next = 3;
+            _context4.next = 2;
             return axios__WEBPACK_IMPORTED_MODULE_4___default.a.get("http://127.0.0.1:8000/api/files/".concat(id, "/"), {
               headers: {
                 'Authorization': "Token ".concat(localStorage.getItem('access_token'))
@@ -804,11 +796,11 @@ function Home() {
               withCredentials: true,
               responseType: 'json'
             });
-          case 3:
+          case 2:
             response = _context4.sent;
             setNewFileName(response.data.filename);
             fileIdToRename.current = id;
-          case 6:
+          case 5:
           case "end":
             return _context4.stop();
         }
@@ -835,8 +827,7 @@ function Home() {
           case 2:
             response = _context5.sent;
             setSharedLink("".concat(origin, "/").concat(response.data.link, "/"));
-            setShowModalFile(true);
-          case 5:
+          case 4:
           case "end":
             return _context5.stop();
         }
@@ -846,15 +837,8 @@ function Home() {
       return _ref5.apply(this, arguments);
     };
   }();
-  var closeModal = function closeModal() {
-    setShowModal(false);
-    setShowModalRename(false);
-    setShowModalFile(false);
-    setSharedLink('');
-  };
   var copyLink = function copyLink() {
     navigator.clipboard.writeText(sharedLink);
-    closeModal();
     react_toastify__WEBPACK_IMPORTED_MODULE_6__["toast"].success('Ссылка успешно скопирована в буфер обмена!');
   };
   var logOut = /*#__PURE__*/function () {
@@ -909,13 +893,18 @@ function Home() {
     onDownload: sharedFile,
     onRename: openModalRename,
     onOpen: openModalFile
-  })), showModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "modal",
-    tabindex: "-1"
+    id: "staticBackdropShared",
+    "data-bs-backdrop": "static",
+    "data-bs-keyboard": "false",
+    tabindex: "-1",
+    "aria-labelledby": "staticBackdropLabel",
+    "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "modal-dialog"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    clclassNameass: "modal-content"
+    className: "modal-content"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "modal-header"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -927,14 +916,20 @@ function Home() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
     className: "btn btn-primary",
+    "data-bs-dismiss": "modal",
     onClick: copyLink
   }, "\u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u0441\u0441\u044B\u043B\u043A\u0443"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
     className: "btn btn-secondary",
-    onClick: closeModal
-  }, "\u041E\u0442\u043C\u0435\u043D\u0430"))))), showModalRename && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    "data-bs-dismiss": "modal"
+  }, "\u041E\u0442\u043C\u0435\u043D\u0430"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "modal",
-    tabindex: "-1"
+    id: "staticBackdropRename",
+    "data-bs-backdrop": "static",
+    "data-bs-keyboard": "false",
+    tabindex: "-1",
+    "aria-labelledby": "staticBackdropLabel",
+    "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "modal-dialog"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -957,17 +952,22 @@ function Home() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-primary",
     type: "submit",
+    "data-bs-dismiss": "modal",
     onClick: function onClick(e) {
-      renameFile();
-      closeModal();
+      return renameFile();
     }
   }, "\u041F\u0435\u0440\u0435\u0438\u043C\u0435\u043D\u043E\u0432\u0430\u0442\u044C"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
     className: "btn btn-secondary",
-    onClick: closeModal
-  }, "\u041E\u0442\u043C\u0435\u043D\u0430"))))), showModalFile && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    "data-bs-dismiss": "modal"
+  }, "\u041E\u0442\u043C\u0435\u043D\u0430"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "modal",
-    tabindex: "-1"
+    id: "staticBackdropShow",
+    "data-bs-backdrop": "static",
+    "data-bs-keyboard": "false",
+    tabindex: "-1",
+    "aria-labelledby": "staticBackdropLabel",
+    "aria-hidden": "true"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "modal-dialog"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -982,7 +982,7 @@ function Home() {
     className: "modal-footer"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-secondary",
-    onClick: closeModal
+    "data-bs-dismiss": "modal"
   }, "\u0417\u0430\u043A\u0440\u044B\u0442\u044C"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_toastify__WEBPACK_IMPORTED_MODULE_6__["ToastContainer"], null));
 }
 /* harmony default export */ __webpack_exports__["default"] = (Home);

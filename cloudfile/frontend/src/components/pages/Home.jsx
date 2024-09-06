@@ -11,9 +11,6 @@ import '../style/Home.css';
 
 function Home() {
   const [files, setFiles] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showModalRename, setShowModalRename] = useState(false);
-  const [showModalFile, setShowModalFile] = useState(false);
   const [sharedLink, setSharedLink] = useState('');
   const [newFileName, setNewFileName] = useState('');
   const fileIdToRename = useRef(null)
@@ -38,7 +35,6 @@ function Home() {
         withCredentials: true,
         responseType: 'json'
       });
-      setShowModal(true);
       setSharedLink(`${origin}/${response.data.link}`);
       console.log(response)
   };
@@ -56,7 +52,6 @@ function Home() {
   }
 
   const openModalRename = async(id) => {
-    setShowModalRename(true)
     const response = await axios.get(`http://127.0.0.1:8000/api/files/${id}/`, {
       headers: {
           'Authorization': `Token ${localStorage.getItem('access_token')}`
@@ -77,19 +72,10 @@ function Home() {
       responseType: 'json'
     });
     setSharedLink(`${origin}/${response.data.link}/`);
-    setShowModalFile(true)
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setShowModalRename(false)
-    setShowModalFile(false);
-    setSharedLink('');
   };
 
   const copyLink = () => {
     navigator.clipboard.writeText(sharedLink);
-    closeModal();
     toast.success('Ссылка успешно скопирована в буфер обмена!')
   }
 
@@ -116,10 +102,9 @@ function Home() {
           <Addfile className="col-md-4"/>
           <Listfiles className="flex-grow-1" files={files} setFiles={setFiles} onDelete={deleteFile} onDownload={sharedFile} onRename={openModalRename} onOpen={openModalFile}/>
         </div>
-        {showModal && (
-        <div className="modal" tabindex="-1">
+        <div className="modal" id="staticBackdropShared" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div className="modal-dialog">
-            <div clclassNameass="modal-content">
+            <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-body">Ссылка для скачивания</h5>
               </div>
@@ -127,15 +112,13 @@ function Home() {
                 <p>{sharedLink}</p>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={copyLink}>Копировать ссылку</button>
-                <button type="button" className="btn btn-secondary" onClick={closeModal}>Отмена</button>
+                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={copyLink}>Копировать ссылку</button>
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
               </div>
             </div>
           </div>
         </div>
-      )}
-        {showModalRename && (
-        <div className="modal" tabindex="-1">
+        <div className="modal" id="staticBackdropRename" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
@@ -145,18 +128,13 @@ function Home() {
                 <input type="text" className="new-name-file" value={newFileName} onChange={(e) => setNewFileName(e.target.value)}></input>
               </div>
               <div className="modal-footer">
-                    <button className="btn btn-primary" type='submit' onClick={(e) => {
-                  renameFile();
-                  closeModal();
-                  }}>Переименовать</button>
-                    <button type="button" className="btn btn-secondary" onClick={closeModal}>Отмена</button>
+                    <button className="btn btn-primary" type='submit' data-bs-dismiss="modal" onClick={(e) => renameFile()}>Переименовать</button>
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                   </div>
             </div>
           </div>
         </div>
-      )}
-        {showModalFile && (
-        <div className="modal" tabindex="-1">
+        <div className="modal" id="staticBackdropShow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
@@ -166,12 +144,11 @@ function Home() {
                 <iframe src={sharedLink}></iframe >
               </div>
               <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={closeModal}>Закрыть</button>
+                <button className="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
               </div>
             </div>
           </div>
         </div>
-        )}
         <ToastContainer />
     </div>
   );

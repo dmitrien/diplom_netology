@@ -80,13 +80,13 @@ function Listfiles({ onDownload, onDelete, onRename, onOpen }) {
                     }}>
                     Удалить
                   </button>
-                  <button type="submit" className="btn btn-primary" onClick={() => onDownload(file.id)}>
+                  <button type="submit" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropShared" onClick={() => onDownload(file.id)}>
                     Поделиться
                   </button>
-                  <button type="submit" className="btn btn-primary" onClick={() => onRename(file.id)}>
+                  <button type="submit" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropRename" onClick={() => onRename(file.id)}>
                     Переименовать
                   </button>
-                  <button type="submit" className="btn btn-primary" onClick={() => onOpen(file.id)}>
+                  <button type="submit" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropShow" onClick={() => onOpen(file.id)}>
                     Просмотр
                   </button>
                 </div>
