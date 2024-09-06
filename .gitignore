@@ -44,6 +44,7 @@ cloudfile/files
 Network Trash Folder
 Temporary Items
 .apdisk
+.vscode
 
 ### PyCharm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
