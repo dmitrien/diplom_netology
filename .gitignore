@@ -208,5 +208,8 @@ vscode/
 # mkdocs documentation
 /site
 
+#static
+cloudfile/static/
+
 #node
 cloudfile/node_modules/
